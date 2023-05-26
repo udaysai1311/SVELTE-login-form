@@ -5,17 +5,24 @@
         password : "",
     }
 
-    let personDetails = []
-
-    function submitForm(event){
-        personDetails = [...personDetails,formSubmit]
-        console.log(personDetails)
+    const submitForm = async (event) => {
+        let personDetails = formSubmit
         event.target.reset()
         
         $: formSubmit = {
             username : '',
             password : '',
         };
+
+        const response = await fetch("http://localhost:3000/",{
+            method: 'POST',
+            body: JSON.stringify(personDetails),
+            headers: {
+                'content-type' : 'application/json'
+            }
+        })
+        const res = await response.json()
+        console.log(res)
     }
 </script>
 
@@ -29,7 +36,7 @@
                 <br />
                 <label for="username">PASSWORD</label>
                 <br />
-                <input id="username" type="text" class="mb-2" placeholder="Password" bind:value={formSubmit.password}/>
+                <input id="username" type="password" class="mb-2" placeholder="Password" bind:value={formSubmit.password}/>
                 <br />
                 <button class="btn btn-primary">Submit</button>
             </form>
